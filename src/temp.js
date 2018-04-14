@@ -15,7 +15,7 @@ const options = {
 
 const calibratedTemperature = (temperature) => {
     const cpuTemperate = fs.readFileSync("/sys/class/thermal/thermal_zone0/temp", "utf8") / 1000
-    return temperature - ((cpuTemperate - temperature) / FUDGE_FACTOR);
+    return temperature //- ((cpuTemperate - temperature) / FUDGE_FACTOR);
 }
 
 
