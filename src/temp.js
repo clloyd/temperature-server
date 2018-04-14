@@ -28,15 +28,11 @@ function Temperature() {
             console.log('BME280 initialization succeeded');
         })
         .catch((err) => console.error(`BME280 initialization failed: ${err} `));
-    
-    return () => {
-    };
 }
 
-Temperature.prototype.getTemperature = function getTemperature() {
+Temperature.prototype.getTemperature = function() {
     return this.bme280.readSensorData()
         .then(data => Promise.resolve(calibratedTemperature(data.temperature_C)));
-
 }
 
 module.exports = Temperature;
