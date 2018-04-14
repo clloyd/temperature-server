@@ -1,4 +1,4 @@
-const getTemperature = require('./src/temp.js');
+const getTemperature = require('./src/temp.js')();
 
 getTemperature()
     .then(t => console.log(t))
