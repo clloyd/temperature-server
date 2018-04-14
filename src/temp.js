@@ -4,7 +4,7 @@ const BME280 = require('bme280-sensor');
 
 const fs = require('fs');
 
-const FUDGE_FACTOR = 1.3;
+const FUDGE_FACTOR = 0.8;
 
 // The BME280 constructor options are optional.
 // 
@@ -19,7 +19,8 @@ const calibratedTemperature = (temperature) => {
     console.log("CPU: " + cpuTemperate);
     console.log("Read Temp: " + temperature);
 
-    return temperature - ((cpuTemperate - temperature) / FUDGE_FACTOR);
+    // return temperature - ((cpuTemperate - temperature) / FUDGE_FACTOR);
+    return temperature * FUDGE_FACTOR;
 }
 
 
