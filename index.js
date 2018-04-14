@@ -1,4 +1,5 @@
 const getTemperature = require('./src/temp.js');
 
-
-console.log(getTemperature);
+getTemperature()
+    .then(t => console.log(t))
+    .catch(err => console.error(err));
