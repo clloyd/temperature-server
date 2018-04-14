@@ -20,19 +20,27 @@ const calibratedTemperature = (temperature) => {
 
 
 function Temperature() {
-
+    this.hasBeenInit = false;
     this.bme280 = new BME280(options);
-
-    this.bme280.init()
-        .then(() => {
-            console.log('BME280 initialization succeeded');
-        })
-        .catch((err) => console.error(`BME280 initialization failed: ${err} `));
 }
 
 Temperature.prototype.getTemperature = function() {
-    return this.bme280.readSensorData()
-        .then(data => Promise.resolve(calibratedTemperature(data.temperature_C)));
+
+    const fetchTempFn = () => {
+        return this.bme280.readSensorData()
+            .then(data => Promise.resolve(calibratedTemperature(data.temperature_C)));
+    }
+
+    if (!this.hasBeenInit) {
+        return this.bme280.init()
+            .then(() => {
+                this.hasBeenInit = true;
+                return fetchTempFn();
+            });
+    } else {
+        return fetchTempFn();
+    }
+
 }
 
 module.exports = Temperature;
