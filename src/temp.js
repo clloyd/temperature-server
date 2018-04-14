@@ -1,50 +1,45 @@
+const huejay = require('huejay');
 
 
-const BME280 = require('bme280-sensor');
+function Temperature(username) {
+    this.client = undefined;
+    this.username = username;
 
-const fs = require('fs');
+    this._fetchTempFromSensors = () => {
+        return this.client.sensors.getAll()
+            .then(sensors => {
+                const tempSensors = sensors.filter((sensor) => sensor.type === "ZLLTemperature")
 
-const FUDGE_FACTOR = 3;
-
-// The BME280 constructor options are optional.
-// 
-const options = {
-  i2cBusNo   : 1, // defaults to 1
-  i2cAddress : BME280.BME280_DEFAULT_I2C_ADDRESS() // defaults to 0x77
-};
-
-const calibratedTemperature = (temperature) => {
-    const cpuTemperate = fs.readFileSync("/sys/class/thermal/thermal_zone0/temp", "utf8") / 1000;
-
-    console.log("CPU: " + cpuTemperate);
-    console.log("Read Temp: " + temperature);
-
-    return temperature - ((cpuTemperate - temperature) / FUDGE_FACTOR);    
-}
+                const activeSensor = tempSensors.filter((sensor) => sensor.config.attributes.attributes.on)[0];
 
 
-function Temperature() {
-    this.hasBeenInit = false;
-    this.bme280 = new BME280(options);
-}
+                console.log(JSON.stringify(activeSensor, null, 2))
+                if (!activeSensor) {
+                    return Promise.reject("Could not find a sensor");
+                }
 
-Temperature.prototype.getTemperature = function() {
-
-    const fetchTempFn = () => {
-        return this.bme280.readSensorData()
-            .then(data => Promise.resolve(calibratedTemperature(data.temperature_C)));
+                return Promise.resolve(activeSensor.state.attributes.attributes.temperature / 100);
+            });      
     }
+}
 
-    if (!this.hasBeenInit) {
-        return this.bme280.init()
-            .then(() => {
-                this.hasBeenInit = true;
-                return fetchTempFn();
+Temperature.prototype.init = function() {
+    return huejay.discover()
+        .then(bridges => {
+            this.client = new huejay.Client({
+                host:     bridges[0].ip,
+                username: this.username
             });
-    } else {
-        return fetchTempFn();
+        });
+}
+
+Temperature.prototype.getTemperatures = function() {
+    if (!this.client) {
+        return this.init()
+            .then(() => this._fetchTempFromSensors());
     }
 
+    return this._fetchTempFromSensors();
 }
 
 module.exports = Temperature;
