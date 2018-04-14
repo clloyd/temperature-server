@@ -1,0 +1,22 @@
+{
+  "name": "temperature-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clloyd/temperature-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/clloyd/temperature-server/issues"
+  },
+  "homepage": "https://github.com/clloyd/temperature-server#readme",
+  "dependencies": {
+    "bme280-sensor": "^0.1.6"
+  }
+}
