@@ -11,4 +11,4 @@ app.use(async ctx => {
     ctx.body = await temp.getTemperatures();
 });
 
-app.listen(3000);
+app.listen(8367);
