@@ -4,7 +4,7 @@ const BME280 = require('bme280-sensor');
 
 const fs = require('fs');
 
-const FUDGE_FACTOR = 1.4;
+const FUDGE_FACTOR = 1.5;
 
 // The BME280 constructor options are optional.
 // 
