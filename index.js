@@ -13,8 +13,10 @@ const bme280 = new BME280(options);
 
 
 const calibrateData = (temperature) => {
+
+    const cpuTemperate = fs.readFileSync("/sys/class/thermal/thermal_zone0/temp", "utf8")
     
-    console.log(fs.readFileSync("/sys/class/thermal/thermal_zone0/temp"));
+    console.log(cpuTemperate);
 
     return temperature;
 }
