@@ -18,27 +18,25 @@ const calibratedTemperature = (temperature) => {
     return temperature - ((cpuTemperate - temperature) / FUDGE_FACTOR);
 }
 
-// Read BME280 sensor data, repeat
-//
-const getTemperature = () => {
-    return bme280.readSensorData()
-        .then(data => Promise.resolve(calibratedTemperature(data.temperature_C)));
-};
 
-module.exports = () => {
+function Temperature() {
 
-    const bme280 = new BME280(options);
+    this.bme280 = new BME280(options);
 
-    bme280.init()
+    this.bme280.init()
         .then(() => {
             console.log('BME280 initialization succeeded');
         })
         .catch((err) => console.error(`BME280 initialization failed: ${err} `));
     
     return () => {
-        return bme280.readSensorData()
-            .then(data => Promise.resolve(calibratedTemperature(data.temperature_C)));
     };
 }
 
-module.exports = getTemperature();
+Temperature.prototype.getTemperature = function getTemperature() {
+    return this.bme280.readSensorData()
+        .then(data => Promise.resolve(calibratedTemperature(data.temperature_C)));
+
+}
+
+module.exports = Temperature;

@@ -1,5 +1,7 @@
-const getTemperature = require('./src/temp.js')();
+const Temperature = require('./src/temp.js');
 
-getTemperature()
+const temp = new Temperature();
+
+temp.getTemperature()
     .then(t => console.log(t))
     .catch(err => console.error(err));
