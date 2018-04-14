@@ -9,11 +9,7 @@ function Temperature(username) {
         return this.client.sensors.getAll()
             .then(sensors => {
                 const tempSensors = sensors.filter((sensor) => sensor.type === "ZLLTemperature")
-
                 const activeSensor = tempSensors.filter((sensor) => sensor.config.attributes.attributes.on)[0];
-
-
-                console.log(JSON.stringify(activeSensor, null, 2))
                 if (!activeSensor) {
                     return Promise.reject("Could not find a sensor");
                 }

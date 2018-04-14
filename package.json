@@ -18,6 +18,7 @@
   "homepage": "https://github.com/clloyd/temperature-server#readme",
   "dependencies": {
     "bme280-sensor": "^0.1.6",
-    "huejay": "^1.8.1"
+    "huejay": "^1.8.1",
+    "koa": "^2.5.0"
   }
 }

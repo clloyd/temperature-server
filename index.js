@@ -3,6 +3,12 @@ const secrets = require('./secret.js');
 
 const temp = new Temperature(secrets.username);
 
-temp.getTemperatures()
-    .then(t => console.log(t))
-    .catch(err => console.error(err));
+const Koa = require('koa');
+
+const app = new Koa();
+
+app.use(async ctx => {
+    ctx.body = await temp.getTemperatures();
+});
+
+app.listen(3000);
