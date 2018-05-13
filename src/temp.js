@@ -1,20 +1,24 @@
 const huejay = require('huejay');
 
 
-function Temperature(username) {
+function Temperature(username, sensorId) {
     this.client = undefined;
     this.username = username;
+    this.sensorId = sensorId;
 
     this._fetchTempFromSensors = () => {
         return this.client.sensors.getAll()
             .then(sensors => {
                 const tempSensors = sensors.filter((sensor) => sensor.type === "ZLLTemperature")
-                const activeSensor = tempSensors.filter((sensor) => sensor.config.attributes.attributes.on)[0];
-                if (!activeSensor) {
+
+                const activeSensors = tempSensors.filter(sensor => sensor.config.attributes.attributes.on);
+                const matchingSensor = tempSensors.filter(sensor => sensor.attributes.attributes.uniqueid === this.sensorId)[0]
+                console.log(JSON.stringify(matchingSensor, null, 2));
+                if (!matchingSensor) {
                     return Promise.reject("Could not find a sensor");
                 }
 
-                return Promise.resolve(activeSensor.state.attributes.attributes.temperature / 100);
+                return Promise.resolve(matchingSensor.state.attributes.attributes.temperature / 100);
             });      
     }
 }
