@@ -13,7 +13,6 @@ function Temperature(username, sensorId) {
 
                 const activeSensors = tempSensors.filter(sensor => sensor.config.attributes.attributes.on);
                 const matchingSensor = tempSensors.filter(sensor => sensor.attributes.attributes.uniqueid === this.sensorId)[0]
-                console.log(JSON.stringify(matchingSensor, null, 2));
                 if (!matchingSensor) {
                     return Promise.reject("Could not find a sensor");
                 }
